@@ -1,0 +1,11 @@
+.container {
+    padding: 20px;
+}
+
+.p-dialog {
+    min-width: 300px;
+}
+
+.p-field {
+    margin-bottom: 1rem;
+}

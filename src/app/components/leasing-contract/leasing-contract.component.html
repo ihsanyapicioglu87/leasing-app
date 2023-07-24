@@ -1,0 +1,59 @@
+<div class="container">
+  <h1>Leasing Contract List</h1>
+
+  <!-- DataTable to display the list of leasing contracts -->
+  <p-table [value]="leasingContracts" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Contract Number</th>
+        <th>Monthly Rate</th>
+        <th>Customer</th>
+        <th>Vehicle</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-contract>
+      <tr>
+        <td>{{ contract.contractNumber }}</td>
+        <td>{{ contract.monthlyRate }}</td>
+        <td>{{ contract.customer?.firstName }} {{ contract.customer?.lastName }}</td>
+        <td>{{ contract.vehicle?.brand }} {{ contract.vehicle?.model }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" (click)="showEditDialog(contract)"></button>
+          <button pButton icon="pi pi-trash" (click)="deleteLeasingContract(contract)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Add Leasing Contract Button -->
+  <button pButton type="button" label="Add Leasing Contract" icon="pi pi-plus" (click)="showAddDialog()"></button>
+
+  <!-- Dialog for adding/editing leasing contracts -->
+  <p-dialog header="{{ editMode ? 'Edit Leasing Contract' : 'Add Leasing Contract' }}" [(visible)]="displayDialog"
+    [modal]="true">
+    <ng-container *ngIf="selectedLeasingContract">
+      <!-- Leasing Contract form fields here -->
+      <div class="form-field">
+        <label for="contractNumber">Contract Number</label>
+        <input id="contractNumber" type="text" [(ngModel)]="selectedLeasingContract.contractNumber" />
+      </div>
+      <div class="form-field">
+        <label for="monthlyRate">Monthly Rate</label>
+        <input id="monthlyRate" type="number" [(ngModel)]="selectedLeasingContract.monthlyRate" />
+      </div>
+      <div class="form-field">
+        <label for="customer">Customer</label>
+        <p-dropdown id="customer" [(ngModel)]="selectedLeasingContract.customer" [options]="customers"
+          optionLabel="fullName"></p-dropdown>
+      </div>
+      <div class="form-field">
+        <label for="vehicle">Vehicle</label>
+        <p-dropdown id="vehicle" [(ngModel)]="selectedLeasingContract.vehicle" [options]="vehicles"
+          optionLabel="model"></p-dropdown>
+      </div>
+    </ng-container>
+    <button pButton type="button" (click)="saveLeasingContract()" label="Save"></button>
+    <button pButton type="button" (click)="cancel()" label="Cancel"></button>
+  </p-dialog>
+</div>

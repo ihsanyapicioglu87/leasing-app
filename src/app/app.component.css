@@ -1,0 +1,8 @@
+.container {
+    display: flex;
+  }
+  
+  app-sidebar {
+    flex-basis: 200px;
+    min-width: 200px;
+  }
