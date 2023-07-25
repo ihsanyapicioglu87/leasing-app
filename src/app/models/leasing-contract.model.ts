@@ -1,5 +1,3 @@
-// leasing-contract.model.ts
-
 import { Customer } from './customer.model';
 import { Vehicle } from './vehicle.model';
 

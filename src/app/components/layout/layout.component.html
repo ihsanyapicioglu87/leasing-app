@@ -1,5 +1,5 @@
 <div class="layout-container">
-    <div class="sidebar">
+    <div class="sidebar" *ngIf="loginComponent.isLoggedIn">  
       <!-- Sidebar Content -->
       <ul class="sidebar-menu">
         <li><a routerLink="/dashboard">Dashboard</a></li>

@@ -21,6 +21,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ToastModule } from 'primeng/toast';
+import { LoginComponent } from './login/login.component';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { ToastModule } from 'primeng/toast';
     LeasingContractComponent,
     SidebarComponent,
     DashboardComponent,
-    LayoutComponent
+    LayoutComponent,
+    LoginComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

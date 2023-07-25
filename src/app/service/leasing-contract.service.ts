@@ -1,15 +1,14 @@
-// leasing-contract.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LeasingContract } from '../models/leasing-contract.model';
+import { BASE_URL } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LeasingContractService {
-  private apiUrl: string = 'http://localhost:8080/api/leasing-contracts';
+  private apiUrl = BASE_URL + '/leasing-contracts';
 
   constructor(private http: HttpClient) {}
 

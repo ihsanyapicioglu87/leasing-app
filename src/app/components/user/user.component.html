@@ -1,0 +1,37 @@
+<div class="container">
+    <button type="button" pButton label="Add User" icon="pi pi-plus" (click)="showDialogToAdd()" class="add-button"></button>
+  
+    <p-table [value]="users">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Username</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>{{ user.username }}</td>
+          <td>
+            <button type="button" pButton icon="pi pi-pencil" class="edit-button" (click)="editUser(user)"></button>
+            <button type="button" pButton icon="pi pi-trash" class="delete-button" (click)="deleteUser(user)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+    <p-dialog header="{{ isNewUser ? 'Add User' : 'Edit User' }}" [(visible)]="displayDialog" [modal]="true">
+      <div class="user-dialog">
+        <div class="form-field">
+          <label for="username">Username:</label>
+          <input type="text" pInputText id="username" [(ngModel)]="user.username" />
+        </div>
+        <div class="form-field">
+          <label for="password">Password:</label>
+          <input type="password" pPassword id="password" [(ngModel)]="user.password" />
+        </div>
+      </div>
+      <button type="button" pButton label="Save" (click)="saveUser()" class="save-button"></button>
+      <button type="button" pButton label="Cancel" (click)="cancel()" class="cancel-button"></button>
+    </p-dialog>
+  </div>
+  

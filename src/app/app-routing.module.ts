@@ -5,6 +5,8 @@ import { VehicleComponent } from './components/vehicle/vehicle.component';
 import { LeasingContractComponent } from './components/leasing-contract/leasing-contract.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { LoginComponent } from './login/login.component';
+import { UserComponent } from './components/user/user.component';
 
 const routes: Routes = [
   {
@@ -12,8 +14,10 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'login', component: LoginComponent },
       { path: 'customers', component: CustomerComponent },
       { path: 'vehicles', component: VehicleComponent },
+      { path: 'users', component: UserComponent },
       { path: 'leasing-contracts', component: LeasingContractComponent },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     ],

@@ -1,5 +1,3 @@
-// vehicle.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { Vehicle } from '../../models/vehicle.model';
 import { VehicleService } from '../../service/vehicle.service';

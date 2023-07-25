@@ -1,5 +1,3 @@
-// leasing-contract.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Customer } from 'src/app/models/customer.model';
