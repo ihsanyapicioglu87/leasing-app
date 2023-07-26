@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Vehicle } from '../../models/vehicle.model';
 import { VehicleService } from '../../service/vehicle.service';
 import { MessageService } from 'primeng/api';
@@ -12,18 +13,31 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class VehicleComponent implements OnInit {
   vehicles: Vehicle[] = [];
-  selectedVehicle: Vehicle = {id: 0, brand: '', model: '', modelYear: 0, vin: '', price: 0};
+  selectedVehicle: Vehicle = new Vehicle();
   displayDialog: boolean = false;
   editMode: boolean = false;
+  vehicleForm!: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private vehicleService: VehicleService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
+    this.initVehicleForm();
     this.loadVehicles();
+  }
+
+  initVehicleForm(): void {
+    this.vehicleForm = this.fb.group({
+      brand: new FormControl('', Validators.required),
+      model: new FormControl('', Validators.required),
+      modelYear: new FormControl('', [Validators.required, Validators.pattern(/^[1-9][0-9]{3}$/)]),
+      vin: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.required),
+    });
   }
 
   loadVehicles(): void {
@@ -45,17 +59,30 @@ export class VehicleComponent implements OnInit {
     this.selectedVehicle = new Vehicle();
     this.editMode = false;
     this.displayDialog = true;
+    this.vehicleForm.reset();
   }
 
   showEditDialog(vehicle: Vehicle): void {
     this.selectedVehicle = { ...vehicle };
     this.editMode = true;
     this.displayDialog = true;
+    this.vehicleForm.patchValue(vehicle);
   }
 
   saveVehicle(): void {
+    if (this.vehicleForm.invalid) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please fill in all required fields correctly.',
+      });
+      return;
+    }
+
+    this.selectedVehicle = { ...this.selectedVehicle, ...this.vehicleForm.value };
+
     if (this.editMode) {
-      this.vehicleService.updateVehicle(this.selectedVehicle!).subscribe(
+      this.vehicleService.updateVehicle(this.selectedVehicle).subscribe(
         () => {
           this.messageService.add({
             severity: 'success',
@@ -74,7 +101,7 @@ export class VehicleComponent implements OnInit {
         }
       );
     } else {
-      this.vehicleService.createVehicle(this.selectedVehicle!).subscribe(
+      this.vehicleService.createVehicle(this.selectedVehicle).subscribe(
         () => {
           this.messageService.add({
             severity: 'success',
@@ -122,5 +149,6 @@ export class VehicleComponent implements OnInit {
 
   cancel(): void {
     this.displayDialog = false;
+    this.vehicleForm.reset();
   }
 }

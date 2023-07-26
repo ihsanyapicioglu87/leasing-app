@@ -33,7 +33,7 @@ export class CustomerService {
   }
 
   updateCustomer(customer: Customer): Observable<Customer> {
-    const url = `${this.apiUrl}/update/${customer.id}`;
+    const url = `${this.apiUrl}/update`;
     return this.http.put<Customer>(url, customer, this.getHttpOptions()).pipe(
       catchError((error: any) => throwError('Error updating customer'))
     );

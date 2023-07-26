@@ -2,9 +2,9 @@ import { Customer } from './customer.model';
 import { Vehicle } from './vehicle.model';
 
 export class LeasingContract {
-  id?: number;
+  id?: number | null;
   contractNumber!: string;
   monthlyRate!: number;
-  customer!: Customer;
-  vehicle!: Vehicle;
+  customerId!: number;
+  vehicleId!: number;
 }

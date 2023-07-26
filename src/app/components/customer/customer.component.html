@@ -1,59 +1,59 @@
 <div class="container">
-    <h1>Customer Management</h1>
-    <p-table [value]="customers" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Birthdate</th>
-                <th>Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-customer>
-            <tr>
-                <td>{{ customer?.firstName }}</td>
-                <td>{{ customer?.lastName }}</td>
-                <td>{{ customer?.birthdate | date:'shortDate' }}</td>
-                <td>
-                    <button pButton type="button" icon="pi pi-pencil" (click)="editCustomer(customer)"
-                        class="p-button-rounded p-button-primary" pTooltip="Edit"></button>
-                        <p-confirmDialog></p-confirmDialog>
-                    <button pButton type="button" icon="pi pi-trash" (click)="deleteCustomer(customer)"
-                        class="p-button-rounded p-button-danger" pTooltip="Delete"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+  <h1>Customer Management</h1>
+  <p-table [value]="customers" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Birthdate</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+      <tr>
+        <td>{{ customer?.firstName }}</td>
+        <td>{{ customer?.lastName }}</td>
+        <td>{{ customer?.birthdate | date:'shortDate' }}</td>
+        <td>
+          <button pButton type="button" icon="pi pi-pencil" (click)="editCustomer(customer)"
+            class="p-button-rounded p-button-primary" pTooltip="Edit"></button>
+          <p-confirmDialog></p-confirmDialog>
+          <button pButton type="button" icon="pi pi-trash" (click)="deleteCustomer(customer)"
+            class="p-button-rounded p-button-danger" pTooltip="Delete"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 
-    <!-- Add Customer Button -->
-    <button pButton type="button" label="Add Customer" icon="pi pi-plus" (click)="showDialogToAdd()"
-        class="p-button-rounded p-button-success"></button>
+  <button pButton type="button" label="Add Customer" icon="pi pi-plus" (click)="showDialogToAdd()"
+    class="p-button-rounded p-button-success"></button>
+  <p-toast></p-toast>
 
-    <!-- Edit Customer Dialog -->
-    <p-dialog [(visible)]="displayDialog" [style]="{ width: '50%' }" styleClass="p-fluid">
-        <h4>{{ isNewCustomer ? 'Add New Customer' : 'Edit Customer' }}</h4>
-      
-        <div class="p-fluid">
-          <div class="p-field">
-            <label for="firstName">First Name</label>
-            <input id="firstName" pInputText [(ngModel)]="customer.firstName" />
-          </div>
-      
-          <div class="p-field">
-            <label for="lastName">Last Name</label>
-            <input id="lastName" pInputText [(ngModel)]="customer.lastName" />
-          </div>
-      
-          <div class="p-field">
-            <label for="birthdate">Birthdate</label>
-            <p-calendar id="birthdate" [(ngModel)]="customer.birthdate"></p-calendar>
-          </div>
+  <p-dialog [(visible)]="displayDialog" [style]="{ width: '50%' }" styleClass="p-fluid">
+    <h4>{{ isNewCustomer ? 'Add New Customer' : 'Edit Customer' }}</h4>
+    <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
+
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="firstName">First Name</label>
+          <input id="firstName" pInputText formControlName="firstName" [(ngModel)]="customer.firstName" />
         </div>
-      
-        <div class="p-dialog-footer">
-          <button pButton type="button" label="Save" (click)="saveCustomer()"></button>
-          <button pButton type="button" label="Cancel" (click)="cancel()"></button>
+
+        <div class="p-field">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" pInputText formControlName="lastName" [(ngModel)]="customer.lastName" />
         </div>
-      </p-dialog>
-      
+
+        <div class="p-field">
+          <label for="birthdate">Birthdate</label>
+          <p-calendar id="birthdate" formControlName="birthdate" [(ngModel)]="customer.birthdate"></p-calendar>
+        </div>
+      </div>
+
+      <div class="p-dialog-footer">
+        <button pButton type="submit" label="Save"></button>
+        <button pButton type="button" label="Cancel" (click)="cancel()"></button>
+      </div>
+    </form>
+  </p-dialog>
 </div>
