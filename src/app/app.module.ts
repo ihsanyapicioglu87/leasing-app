@@ -16,13 +16,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { VehicleComponent } from './components/vehicle/vehicle.component';
 import { LeasingContractComponent } from './components/leasing-contract/leasing-contract.component';
 import { DropdownModule } from 'primeng/dropdown';
-import { SidebarModule } from "primeng/sidebar";
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ToastModule } from 'primeng/toast';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './components/user/user.component';
+import { MenuBarComponent } from './menu-bar/menu-bar.component';
+import { MenubarModule } from 'primeng/menubar';
+import { RoleComponent } from './role/role.component';
+import { MultiSelectModule } from "primeng/multiselect";
 
 @NgModule({
   declarations: [
@@ -30,11 +32,12 @@ import { UserComponent } from './components/user/user.component';
     CustomerComponent,
     VehicleComponent,
     LeasingContractComponent,
-    SidebarComponent,
     DashboardComponent,
     LayoutComponent,
     LoginComponent,
-    UserComponent
+    UserComponent,
+    MenuBarComponent,
+    RoleComponent
   ],
   imports: [
     BrowserModule,
@@ -44,14 +47,15 @@ import { UserComponent } from './components/user/user.component';
     ButtonModule,
     DialogModule,
     CalendarModule,
-    SidebarModule,
     FormsModule,
     DropdownModule,
     ConfirmDialogModule,
     HttpClientModule,
     NoopAnimationsModule,
     ToastModule,
-    ReactiveFormsModule 
+    ReactiveFormsModule,
+    MenubarModule,
+    MultiSelectModule
     
   ],
   providers: [MessageService, ConfirmationService],

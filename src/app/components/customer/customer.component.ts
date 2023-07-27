@@ -76,7 +76,7 @@ export class CustomerComponent implements OnInit {
 
   saveCustomer() {
     if (this.isNewCustomer) {
-      if (this.customerForm.valid) { // Check if the form is valid
+      if (this.customerForm.valid) {
         this.customerService.addCustomer(this.customer).subscribe(
           () => {
             this.loadCustomers();
@@ -92,7 +92,7 @@ export class CustomerComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill all required fields.' });
       }
     } else {
-      if (this.customerForm.valid) { // Check if the form is valid
+      if (this.customerForm.valid) {
         this.customerService.updateCustomer(this.customer).subscribe(
           () => {
             this.loadCustomers();
@@ -113,6 +113,6 @@ export class CustomerComponent implements OnInit {
   cancel() {
     this.displayDialog = false;
     this.customer = { firstName: '', lastName: '', birthdate: new Date() };
-    this.customerForm.reset(); // Reset the form
+    this.customerForm.reset();
   }
 }

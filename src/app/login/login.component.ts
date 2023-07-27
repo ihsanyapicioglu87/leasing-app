@@ -13,23 +13,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  isLoggedIn: boolean = false;
   username: string = '';
   password: string = '';
 
   constructor(private authService: AuthService,  private router: Router, private cdr: ChangeDetectorRef) { }
 
   onLoginClick() {
-    this.authService.loginUser(this.username, this.password).subscribe(
-      (response) => {
-        this.isLoggedIn = true;
+    this.authService.login(this.username, this.password)
         console.log('Login successful!');
         this.cdr.detectChanges();
         this.router.navigate(['/dashboard']);
-      },
-      (error) => {
-        console.error('Login failed:', error);
-      }
-    );
   }
 }

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LeasingContract } from '../models/leasing-contract.model';
 import { BASE_URL } from '../utils/utils';
+import { Vehicle } from '../models/vehicle.model';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,12 @@ export class LeasingContractService {
     return this.http.get<LeasingContract[]>(`${this.apiUrl}`);
   }
 
+  getAvailableVehicles(): Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(this.apiUrl + '/availableVehicles').pipe(
+      catchError(this.handleError<Vehicle[]>('getVehicles', []))
+    );
+  }
+
   createLeasingContract(leasingContract: LeasingContract): Observable<LeasingContract> {
     return this.http.post<LeasingContract>(`${this.apiUrl}/`, leasingContract);
   }
@@ -26,5 +34,12 @@ export class LeasingContractService {
 
   deleteLeasingContract(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      return of(result as T);
+    };
   }
 }

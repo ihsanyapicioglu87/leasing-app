@@ -20,10 +20,13 @@ export class LeasingContractComponent implements OnInit {
   vehicles: { label: string; value: Vehicle | null }[] = [];
 
   selectedLeasingContract: LeasingContract | undefined;
+  selectedCustomer: Customer | null = null;
+  selectedVehicle: Vehicle | null = null;
+
   displayDialog: boolean = false;
   editMode: boolean = false;
+  displayDetailsDialog: boolean = false;
 
-  // Declare a FormGroup for the leasing contract form
   leasingContractForm: FormGroup;
 
   constructor(
@@ -34,7 +37,6 @@ export class LeasingContractComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {
-    // Initialize the leasing contract form with the required form controls
     this.leasingContractForm = this.formBuilder.group({
       contractNumber: ['', Validators.required],
       monthlyRate: [0, Validators.required],
@@ -46,34 +48,32 @@ export class LeasingContractComponent implements OnInit {
   ngOnInit(): void {
     this.loadLeasingContracts();
     this.loadCustomers();
-    this.loadVehicles();
+    this.loadAvailableVehicles();
   }
 
   loadLeasingContracts(): void {
     this.leasingContractService.getLeasingContracts().subscribe((leasingContracts) => {
-      // Fetch customers and vehicles separately
       this.customerService.getCustomers().subscribe((customers) => {
         this.vehicleService.getVehicles().subscribe((vehicles) => {
-          // Create an array to store the final data for each leasing contract
           const leasingContractData: any[] = [];
-  
+
           for (const leasingContract of leasingContracts) {
-            // Find the corresponding customer and vehicle for each leasing contract
             const customer = customers.find((c) => c.id === leasingContract.customerId);
             const vehicle = vehicles.find((v) => v.id === leasingContract.vehicleId);
-  
-            // Combine the relevant data for the leasing contract
+
             const leasingContractInfo = {
               id: leasingContract.id,
               contractNumber: leasingContract.contractNumber,
               monthlyRate: leasingContract.monthlyRate,
+              customerId: leasingContract.customerId,
+              vehicleId: leasingContract.vehicleId,
               customerInfo: customer ? `${customer.firstName} ${customer.lastName}` : 'N/A',
               vehicleInfo: vehicle ? `${vehicle.brand} ${vehicle.model}` : 'N/A',
             };
-  
+
             leasingContractData.push(leasingContractInfo);
           }
-  
+
           this.leasingContracts = leasingContractData;
         });
       });
@@ -82,7 +82,6 @@ export class LeasingContractComponent implements OnInit {
 
   loadCustomers(): void {
     this.customerService.getCustomers().subscribe((customers) => {
-      // Add the "Select One" option as the default option
       this.customers = [
         { label: 'Select One', value: null },
         ...customers.map((customer) => ({
@@ -93,9 +92,8 @@ export class LeasingContractComponent implements OnInit {
     });
   }
 
-  loadVehicles(): void {
-    this.vehicleService.getVehicles().subscribe((vehicles) => {
-      // Add the "Select One" option as the default option
+  loadAvailableVehicles(): void {
+    this.leasingContractService.getAvailableVehicles().subscribe((vehicles) => {
       this.vehicles = [
         { label: 'Select One', value: null },
         ...vehicles.map((vehicle) => ({
@@ -110,35 +108,31 @@ export class LeasingContractComponent implements OnInit {
     this.selectedLeasingContract = new LeasingContract();
     this.displayDialog = true;
     this.editMode = false;
-    // Reset the form when showing the dialog for adding a new leasing contract
+    this.loadAvailableVehicles();
     this.leasingContractForm.reset();
   }
 
-showEditDialog(leasingContract: LeasingContract): void {
-  this.selectedLeasingContract = { ...leasingContract };
-  this.displayDialog = true;
-  this.editMode = true;
+  showEditDialog(leasingContract: LeasingContract): void {
+    this.selectedLeasingContract = { ...leasingContract };
+    this.displayDialog = true;
+    this.editMode = true;
 
-  // Fetch the Customer and Vehicle objects based on their IDs
-  this.customerService.getCustomerById(leasingContract.customerId).subscribe((customer) => {
-    this.leasingContractForm.controls['customer'].setValue(customer);
-  });
+    this.customerService.getCustomerById(leasingContract.customerId).subscribe((customer) => {
+      this.leasingContractForm.controls['customer'].setValue(customer);
+    });
 
-  this.vehicleService.getVehicleById(leasingContract.vehicleId).subscribe((vehicle) => {
-    this.leasingContractForm.controls['vehicle'].setValue(vehicle);
-  });
+    this.vehicleService.getVehicleById(leasingContract.vehicleId).subscribe((vehicle) => {
+      this.leasingContractForm.controls['vehicle'].setValue(vehicle);
+    });
 
-  // Set the form values when showing the dialog for editing an existing leasing contract
-  this.leasingContractForm.patchValue({
-    contractNumber: leasingContract.contractNumber,
-    monthlyRate: leasingContract.monthlyRate,
-  });
-}
+    this.leasingContractForm.patchValue({
+      contractNumber: leasingContract.contractNumber,
+      monthlyRate: leasingContract.monthlyRate,
+    });
+  }
 
   saveLeasingContract(): void {
-    // Check if the form is valid
     if (this.leasingContractForm.valid) {
-      // Assign form values to the selectedLeasingContract object
       this.selectedLeasingContract!.contractNumber = this.leasingContractForm.value.contractNumber;
       this.selectedLeasingContract!.monthlyRate = this.leasingContractForm.value.monthlyRate;
       this.selectedLeasingContract!.customerId = this.leasingContractForm.value.customer.value.id;
@@ -151,14 +145,29 @@ showEditDialog(leasingContract: LeasingContract): void {
           this.loadLeasingContracts();
         });
       } else {
-        this.leasingContractService.createLeasingContract(this.selectedLeasingContract!).subscribe(() => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Leasing Contract created successfully' });
-          this.displayDialog = false;
-          this.loadLeasingContracts();
-        });
+        this.leasingContractService.createLeasingContract(this.selectedLeasingContract!).subscribe(
+          () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Leasing Contract created successfully',
+            });
+            this.displayDialog = false;
+            this.loadLeasingContracts();
+            this.loadAvailableVehicles();
+          },
+          (error) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to create Leasing Contract.',
+            });
+            this.loadAvailableVehicles();
+          }
+        );
       }
+
     } else {
-      // Show an error message if the form is invalid
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill in all required fields' });
     }
   }
@@ -175,8 +184,35 @@ showEditDialog(leasingContract: LeasingContract): void {
     });
   }
 
+  fetchCustomerAndVehicleDetails() {
+    if (this.selectedLeasingContract) {
+      this.customerService
+        .getCustomerById(this.selectedLeasingContract.customerId)
+        .subscribe((customer) => {
+          this.selectedCustomer = customer;
+        });
+
+      this.vehicleService
+        .getVehicleById(this.selectedLeasingContract.vehicleId)
+        .subscribe((vehicle) => {
+          this.selectedVehicle = vehicle;
+        });
+    }
+  }
+
+  showDetails(contract: LeasingContract) {
+    this.selectedLeasingContract = contract;
+    this.fetchCustomerAndVehicleDetails();
+    this.displayDetailsDialog = true;
+  }
+
+  hideDetailsDialog() {
+    this.displayDetailsDialog = false;
+  }
+
   cancel(): void {
     this.displayDialog = false;
     this.selectedLeasingContract = undefined;
+    this.loadAvailableVehicles();
   }
 }

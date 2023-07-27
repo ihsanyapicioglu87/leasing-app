@@ -1,41 +1,44 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { BASE_URL } from '../utils/utils';
 
-
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-    private apiUrl = BASE_URL;
+  private loggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public loggedIn$: Observable<boolean> = this.loggedInSubject.asObservable();
+  private apiUrl = BASE_URL + '/login';
+  constructor(private http: HttpClient, private router: Router) {}
 
-    constructor(private http: HttpClient) { }
+  login(username: string, password: string): void {
+    this.http.post<any>(this.apiUrl, { username, password }).subscribe(
+      (response) => {
+        if (response && response.role === 'admin') {
+          this.loggedInSubject.next(true);
+          localStorage.setItem('currentUser', JSON.stringify(response));
+          this.router.navigate(['/']);
+        }
+      },
+      (error) => {
+        console.error('Login error:', error);
+      }
+    );
+  }
 
-    loginUser(username: string, password: string) {
-        const body = { username, password };
-        const url = `${this.apiUrl}/login`; // Replace with the appropriate API endpoint URL
+  logout(): void {
+    localStorage.removeItem('currentUser');
+    this.loggedInSubject.next(false);
+    this.router.navigate(['/login']);
+  }
 
-        return this.http.post(url, body).pipe(
-            catchError((error: HttpErrorResponse) => {
-                let errorMessage = 'An error occurred'; // Default error message
+  isLoggedIn(): boolean {
+    return this.loggedInSubject.getValue();
+  }
 
-                if (error.error instanceof ErrorEvent) {
-                    errorMessage = `Error: ${error.error.message}`;
-                } else {
-                    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-                }
-
-                console.error(errorMessage);
-                return throwError(errorMessage);
-            })
-        );
-    }
-
-
-    login(username: string, password: string): Observable<any> {
-        const body = { username, password };
-        return this.http.post(`${this.apiUrl}/login`, body);
-    }
+  getLoggedInStatus(): Observable<boolean> {
+    return this.loggedIn$;
+  }
 }

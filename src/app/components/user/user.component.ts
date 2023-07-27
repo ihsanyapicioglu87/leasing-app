@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { UserService } from 'src/app/service/user.service';
+import { Role } from 'src/app/models/role.model';
+import { RoleService } from 'src/app/service/role.service';
 
 @Component({
   selector: 'app-user',
@@ -9,14 +11,23 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class UserComponent implements OnInit {
   users: User[] = [];
-  user: User = { username: '', password: '' };
+  user: User = { username: '', password: '', roles: []};
   displayDialog = false;
   isNewUser = false;
+  roles: Role[] = [];
+  selectedRoles: Role[] = [];
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private roleService: RoleService) { }
 
   ngOnInit() {
     this.loadUsers();
+    this.loadRoles();
+  }
+
+  loadRoles() {
+    this.roleService.getRoles().subscribe((roles) => {
+      this.roles = roles;
+    });
   }
 
   loadUsers(): void {
@@ -42,6 +53,7 @@ export class UserComponent implements OnInit {
   }
 
   saveUser() {
+    this.user.roles = this.selectedRoles;
     if (this.isNewUser) {
       this.userService.createUser(this.user).subscribe(
         () => {
@@ -53,7 +65,7 @@ export class UserComponent implements OnInit {
         }
       );
     } else {
-      this.userService.updateUser(this.user.id!, this.user).subscribe(
+      this.userService.updateUser(this.user).subscribe(
         () => {
           this.loadUsers();
           this.displayDialog = false;
@@ -80,6 +92,6 @@ export class UserComponent implements OnInit {
 
   cancel() {
     this.displayDialog = false;
-    this.user = { username: '', password: '' };
+    this.user = { username: '', password: '', roles:[] };
   }
 }

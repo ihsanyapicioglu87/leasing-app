@@ -7,6 +7,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './components/user/user.component';
+import { RoleComponent } from './role/role.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'customers', component: CustomerComponent },
       { path: 'vehicles', component: VehicleComponent },
       { path: 'users', component: UserComponent },
+      { path: 'roles', component: RoleComponent },
       { path: 'leasing-contracts', component: LeasingContractComponent },
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     ],

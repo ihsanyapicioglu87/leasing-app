@@ -1,1 +1,6 @@
-  @import './app/components/sidebar/sidebar.component.css'
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  font-weight: bold;
+}
+::ng-deep .p-button {
+  cursor: pointer;
+}

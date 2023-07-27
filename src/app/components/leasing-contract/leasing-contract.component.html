@@ -19,17 +19,23 @@
         <td>{{ contract.vehicleInfo}}</td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="showEditDialog(contract)"></button>
-          <p-confirmDialog></p-confirmDialog>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteLeasingContract(contract)"></button>
+          <button pButton icon="pi pi-info-circle" class="p-button-rounded p-button-raised" (click)="showDetails(contract)"></button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
+  width="425" #confirmDialog>
+  <p-footer>
+    <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
+    <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
   <button pButton type="button" label="Add Leasing Contract" icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="showAddDialog()"></button>
   <p-toast></p-toast>
   <p-dialog header="{{ editMode ? 'Edit Leasing Contract' : 'Add Leasing Contract' }}" [(visible)]="displayDialog"
-  [modal]="true">
+  [modal]="true" [style]="{ 'width': '500px', 'height':'600px' }" [baseZIndex]="1000" [draggable]="true" [resizable]="true">
   <ng-container *ngIf="selectedLeasingContract">
     <form [formGroup]="leasingContractForm">
       <div class="form-field">
@@ -42,15 +48,31 @@
       </div>
       <div class="form-field">
         <label for="customer">Customer</label>
-        <p-dropdown id="customer" [options]="customers" optionLabel="label" formControlName="customer" defaultLabel="Select One"></p-dropdown>
+        <p-dropdown id="customer" [options]="customers" optionLabel="label" formControlName="customer"
+          defaultLabel="Select One" [style]="{ 'width': '100%' }"></p-dropdown>
       </div>
       <div class="form-field">
         <label for="vehicle">Vehicle</label>
-        <p-dropdown id="vehicle" [options]="vehicles" optionLabel="label" formControlName="vehicle" defaultLabel="Select One"></p-dropdown>
+        <p-dropdown id="vehicle" [options]="vehicles" optionLabel="label" formControlName="vehicle"
+          defaultLabel="Select One" [style]="{ 'width': '100%' }"></p-dropdown>
       </div>
     </form>
   </ng-container>
-  <button pButton type="button" (click)="saveLeasingContract()" label="Save"></button>
-  <button pButton type="button" (click)="cancel()" label="Cancel"></button>
+  <div class="button-container">
+    <button pButton type="button" (click)="saveLeasingContract()" label="Save" [style]="{ 'margin-right': '10px' }"></button>
+    <button pButton type="button" (click)="cancel()" label="Cancel"></button>
+  </div>
 </p-dialog>
+
+<p-dialog header="Leasing Contract Details" [(visible)]="displayDetailsDialog">
+  <ng-container *ngIf="selectedLeasingContract">
+    <p>Contract Number: {{ selectedLeasingContract.contractNumber }}</p>
+    <p>Monthly Rate: {{ selectedLeasingContract.monthlyRate }}</p>
+    <p>Customer Name: {{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</p>
+    <p>Vehicle Brand: {{ selectedVehicle?.brand }}</p>
+    <p>Vehicle Model: {{ selectedVehicle?.model }}</p>
+  </ng-container>
+  <button pButton type="button" (click)="hideDetailsDialog()" label="Close"></button>
+</p-dialog>
+
 </div>

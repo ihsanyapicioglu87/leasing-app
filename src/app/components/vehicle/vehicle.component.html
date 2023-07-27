@@ -13,7 +13,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-vehicle>
-      <tr>
+      <tr class="p-datatable-rowfont-bold">
         <td>{{ vehicle.brand }}</td>
         <td>{{ vehicle.model }}</td>
         <td>{{ vehicle.modelYear }}</td>
@@ -30,7 +30,14 @@
   <button pButton type="button" label="Add Vehicle" icon="pi pi-plus" (click)="showAddDialog()"
     class="p-button-rounded p-button-success"></button>
   <p-toast></p-toast>
-  <p-confirmDialog></p-confirmDialog>
+
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
+  width="425" #confirmDialog>
+  <p-footer>
+    <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
+    <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
 
   <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
     <p-header>
