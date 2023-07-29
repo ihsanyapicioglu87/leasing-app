@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Vehicle } from '../../models/vehicle.model';
-import { VehicleService } from '../../service/vehicle.service';
-import { MessageService } from 'primeng/api';
-import { ConfirmationService } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Vehicle} from '../../models/vehicle.model';
+import {Brand} from '../../models/brand.model';
+import {Model} from '../../models/model.model';
+import {VehicleService} from '../../service/vehicle.service';
+import {BrandService} from '../../service/brand.service';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {Utils} from '../../utils/utils';
 
 @Component({
   selector: 'app-vehicle',
@@ -17,10 +20,15 @@ export class VehicleComponent implements OnInit {
   displayDialog: boolean = false;
   editMode: boolean = false;
   vehicleForm!: FormGroup;
+  brands: Brand[] = [];
+  models: Model[] = [];
+  modelsFilteredByBrand: Model[] = [];
+  selectedBrandId: number | undefined;
 
   constructor(
     private fb: FormBuilder,
     private vehicleService: VehicleService,
+    private brandService: BrandService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
@@ -28,6 +36,7 @@ export class VehicleComponent implements OnInit {
   ngOnInit(): void {
     this.initVehicleForm();
     this.loadVehicles();
+    this.loadBrands();
   }
 
   initVehicleForm(): void {
@@ -35,24 +44,62 @@ export class VehicleComponent implements OnInit {
       brand: new FormControl('', Validators.required),
       model: new FormControl('', Validators.required),
       modelYear: new FormControl('', [Validators.required, Validators.pattern(/^[1-9][0-9]{3}$/)]),
-      vin: new FormControl('', Validators.required),
+      vin: new FormControl('', Validators.nullValidator),
       price: new FormControl('', Validators.required),
     });
   }
 
   loadVehicles(): void {
-    this.vehicleService.getVehicles().subscribe(
-      (vehicles) => {
+    this.vehicleService.getVehicles().subscribe({
+      next: (vehicles: Vehicle[]) => {
         this.vehicles = vehicles;
       },
-      (error) => {
+      error: (error: any) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to load vehicles.',
+          detail: 'Failed to load vehicles.' + error.message,
         });
       }
-    );
+    });
+  }
+
+  loadBrands(): void {
+    this.brandService.getBrands().subscribe({
+      next: (brands: Brand[]) => {
+        this.brands = brands;
+      },
+      error: (error: any) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load brands.' + error.message,
+        });
+      }
+    });
+  }
+
+
+  onBrandSelectionChange(event: any): void {
+    const selectedBrand: Brand = event.value;
+    this.selectedBrandId = selectedBrand ? selectedBrand.id : undefined;
+    if (this.selectedBrandId) {
+      // Filter the models based on the selected brand
+      this.vehicleService.getFilteredModels(this.selectedBrandId).subscribe({
+        next: (models) => {
+          this.modelsFilteredByBrand = models;
+        },
+        error: (error: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load models for the selected brand.' + error.message,
+          });
+        },
+      });
+    } else {
+      this.modelsFilteredByBrand = this.models;
+    }
   }
 
   showAddDialog(): void {
@@ -71,6 +118,7 @@ export class VehicleComponent implements OnInit {
 
   saveVehicle(): void {
     if (this.vehicleForm.invalid) {
+      Utils.checkForUntouched(this.vehicleForm);
       this.messageService.add({
         severity: 'warn',
         summary: 'Warning',
@@ -82,27 +130,28 @@ export class VehicleComponent implements OnInit {
     this.selectedVehicle = { ...this.selectedVehicle, ...this.vehicleForm.value };
 
     if (this.editMode) {
-      this.vehicleService.updateVehicle(this.selectedVehicle).subscribe(
-        () => {
+      this.vehicleService.updateVehicle(this.selectedVehicle).subscribe({
+        next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
-            detail: 'Vehicle updated successfully.',
+            detail: 'Vehicle updated successfully.'
           });
           this.displayDialog = false;
           this.loadVehicles();
         },
-        (error) => {
+        error: (error: any) => {
+          console.error('Error updating vehicle:', error);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to update vehicle.',
+            detail: 'Failed to update vehicle.' + error.message,
           });
         }
-      );
+      });
     } else {
-      this.vehicleService.createVehicle(this.selectedVehicle).subscribe(
-        () => {
+      this.vehicleService.createVehicle(this.selectedVehicle).subscribe({
+        next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -111,14 +160,14 @@ export class VehicleComponent implements OnInit {
           this.displayDialog = false;
           this.loadVehicles();
         },
-        (error) => {
+        error: (error: any) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to create vehicle.',
+            detail: 'Failed to create vehicle.' + error.message,
           });
-        }
-      );
+        },
+      });
     }
   }
 
@@ -126,8 +175,8 @@ export class VehicleComponent implements OnInit {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this vehicle?',
       accept: () => {
-        this.vehicleService.deleteVehicle(vehicle.id!).subscribe(
-          () => {
+        this.vehicleService.deleteVehicle(vehicle.id!).subscribe({
+          next: () => {
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
@@ -135,14 +184,14 @@ export class VehicleComponent implements OnInit {
             });
             this.loadVehicles();
           },
-          (error) => {
+          error: (error: any) => {
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Failed to delete vehicle.',
+              detail: 'Failed to delete vehicle.' + error.message,
             });
           }
-        );
+        });
       },
     });
   }

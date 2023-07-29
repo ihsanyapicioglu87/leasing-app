@@ -14,8 +14,8 @@
     </ng-template>
     <ng-template pTemplate="body" let-vehicle>
       <tr class="p-datatable-rowfont-bold">
-        <td>{{ vehicle.brand }}</td>
-        <td>{{ vehicle.model }}</td>
+        <td>{{ vehicle.brand.name }}</td>
+        <td>{{ vehicle.model.name }}</td>
         <td>{{ vehicle.modelYear }}</td>
         <td>{{ vehicle.vin || '-' }}</td>
         <td>{{ vehicle.price }}</td>
@@ -28,16 +28,16 @@
   </p-table>
 
   <button pButton type="button" label="Add Vehicle" icon="pi pi-plus" (click)="showAddDialog()"
-    class="p-button-rounded p-button-success"></button>
+          class="p-button-rounded p-button-success"></button>
   <p-toast></p-toast>
 
   <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
-  width="425" #confirmDialog>
-  <p-footer>
-    <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
-    <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
-  </p-footer>
-</p-confirmDialog>
+                   width="425" #confirmDialog>
+    <p-footer>
+      <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
+      <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
+    </p-footer>
+  </p-confirmDialog>
 
   <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
     <p-header>
@@ -48,12 +48,13 @@
       <div class="p-fluid">
         <div class="p-field">
           <label for="brand">Brand</label>
-          <input id="brand" type="text" pInputText formControlName="brand" required>
+          <p-dropdown id="brand" [options]="brands" optionLabel="name" formControlName="brand"
+                      (onChange)="onBrandSelectionChange($event)" [style]="{ width: '100%' }"></p-dropdown>
         </div>
 
         <div class="p-field">
           <label for="model">Model</label>
-          <input id="model" type="text" pInputText formControlName="model" required>
+          <p-dropdown id="model" [options]="modelsFilteredByBrand" optionLabel="name" formControlName="model" [style]="{ width: '100%' }"></p-dropdown>
         </div>
 
         <div class="p-field">
@@ -75,9 +76,9 @@
 
     <p-footer>
       <button *ngIf="selectedVehicle && selectedVehicle.id" type="button" pButton icon="pi pi-save"
-        (click)="saveVehicle()" label="Save"></button>
+              (click)="saveVehicle()" label="Save"></button>
       <button *ngIf="!selectedVehicle || !selectedVehicle.id" type="button" pButton icon="pi pi-plus"
-        (click)="saveVehicle()" label="Add"></button>
+              (click)="saveVehicle()" label="Add"></button>
       <button type="button" pButton icon="pi pi-times" (click)="cancel()" label="Cancel" class="p-button-secondary">
       </button>
     </p-footer>

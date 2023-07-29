@@ -1,7 +1,8 @@
-import { Component, ChangeDetectorRef  } from '@angular/core';
-import { AuthService } from '../service/auth.service';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {ChangeDetectorRef, Component, Injectable} from '@angular/core';
+import {AuthService} from '../service/auth.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Utils} from "../utils/utils";
+import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +14,32 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  loginForm: FormGroup;
 
-  constructor(private authService: AuthService,  private router: Router, private cdr: ChangeDetectorRef) { }
+  constructor(private authService: AuthService, private cdr: ChangeDetectorRef, private formBuilder: FormBuilder,
+              private messageService: MessageService) {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
 
   onLoginClick() {
-    this.authService.login(this.username, this.password)
-        console.log('Login successful!');
-        this.cdr.detectChanges();
-        this.router.navigate(['/dashboard']);
+    if (this.loginForm.invalid) {
+      if (this.loginForm.invalid) {
+        Utils.checkForUntouched(this.loginForm);
+        Utils.addInvalidFormMessage(this.messageService);
+        return;
+      }
+      return;
+    }
+
+    const {username, password} = this.loginForm.value;
+    this.authService.login(username, password)
+    if (localStorage.getItem("loggedInUser")) {
+
+      console.log('Login successful!');
+      this.cdr.detectChanges();
+    }
   }
 }

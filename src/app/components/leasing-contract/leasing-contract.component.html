@@ -4,19 +4,19 @@
   <p-table [value]="leasingContracts" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
-        <th>Contract Number</th>
-        <th>Monthly Rate</th>
+        <th>Contract No</th>
         <th>Customer</th>
         <th>Vehicle</th>
+        <th>Monthly Rate</th>
         <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-contract>
       <tr>
-        <td>{{ contract.contractNumber }}</td>
-        <td>{{ contract.monthlyRate }}</td>
+        <td>{{ contract.contractNo }}</td>
         <td>{{ contract.customerInfo}}</td>
         <td>{{ contract.vehicleInfo}}</td>
+        <td>{{ contract.monthlyRate }}</td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="showEditDialog(contract)"></button>
           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteLeasingContract(contract)"></button>
@@ -35,12 +35,12 @@
   <button pButton type="button" label="Add Leasing Contract" icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="showAddDialog()"></button>
   <p-toast></p-toast>
   <p-dialog header="{{ editMode ? 'Edit Leasing Contract' : 'Add Leasing Contract' }}" [(visible)]="displayDialog"
-  [modal]="true" [style]="{ 'width': '500px', 'height':'600px' }" [baseZIndex]="1000" [draggable]="true" [resizable]="true">
+            [modal]="true" [style]="{ 'width': '500px', 'height':'600px' }" [baseZIndex]="1000" [draggable]="true" [resizable]="true" (onHide)="onEditDialogHide()">
   <ng-container *ngIf="selectedLeasingContract">
     <form [formGroup]="leasingContractForm">
       <div class="form-field">
-        <label for="contractNumber">Contract Number</label>
-        <input id="contractNumber" type="text" pInputText formControlName="contractNumber" required />
+        <label for="contractNo">Contract No</label>
+        <input id="contractNo" type="text" pInputText formControlName="contractNo" required />
       </div>
       <div class="form-field">
         <label for="monthlyRate">Monthly Rate</label>
@@ -54,7 +54,7 @@
       <div class="form-field">
         <label for="vehicle">Vehicle</label>
         <p-dropdown id="vehicle" [options]="vehicles" optionLabel="label" formControlName="vehicle"
-          defaultLabel="Select One" [style]="{ 'width': '100%' }"></p-dropdown>
+                    [style]="{ 'width': '100%' }"></p-dropdown>
       </div>
     </form>
   </ng-container>
@@ -66,11 +66,11 @@
 
 <p-dialog header="Leasing Contract Details" [(visible)]="displayDetailsDialog">
   <ng-container *ngIf="selectedLeasingContract">
-    <p>Contract Number: {{ selectedLeasingContract.contractNumber }}</p>
+    <p>Contract Number: {{ selectedLeasingContract.contractNo }}</p>
     <p>Monthly Rate: {{ selectedLeasingContract.monthlyRate }}</p>
     <p>Customer Name: {{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</p>
-    <p>Vehicle Brand: {{ selectedVehicle?.brand }}</p>
-    <p>Vehicle Model: {{ selectedVehicle?.model }}</p>
+    <p>Vehicle Brand: {{ selectedVehicle?.brand?.name }}</p>
+    <p>Vehicle Model: {{ selectedVehicle?.model?.name }}</p>
   </ng-container>
   <button pButton type="button" (click)="hideDetailsDialog()" label="Close"></button>
 </p-dialog>

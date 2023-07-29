@@ -15,44 +15,49 @@ export class MenuBarComponent implements OnInit {
   ngOnInit() {
     this.authService.getLoggedInStatus().subscribe((loggedIn) => {
       this.loggedIn = loggedIn;
-      this.updateMenuItems();
     });
 
     this.items = [
       {
         label: 'Vehicles',
         icon: 'pi pi-car',
-        routerLink: '/vehicles',
-        disabled: true
+        routerLink: '/vehicles'
+      },
+      {
+        label: 'Brands',
+        icon: 'pi pi-tag',
+        routerLink: '/brands'
+      },
+      {
+        label: 'Models',
+        icon: 'pi pi-cog',
+        routerLink: '/models'
       },
       {
         label: 'Customers',
         icon: 'pi pi-users',
-        routerLink: '/customers',
-        disabled: true
+        routerLink: '/customers'
       },
       {
         label: 'Users',
         icon: 'pi pi-user',
-        routerLink: '/users',
-        disabled: true
+        routerLink: '/users'
+      },
+      {
+        label: 'Roles',
+        icon: 'pi pi-user',
+        routerLink: '/roles'
       },
       {
         label: 'Leasing Contracts',
         icon: 'pi pi-file',
-        routerLink: '/leasing-contracts',
-        disabled: true
+        routerLink: '/leasing-contracts'
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: () => this.authService.logout()
       }
     ];
-
-    this.updateMenuItems();
-  }
-
-  updateMenuItems() {
-    if (this.loggedIn) {
-      this.items.forEach((item) => {
-        item.disabled = false;
-      });
-    }
   }
 }

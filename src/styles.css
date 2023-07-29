@@ -2,5 +2,13 @@
   font-weight: bold;
 }
 ::ng-deep .p-button {
-  cursor: pointer;
+  cursor: pointer !important;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid red;
+}
+
+.p-multiselect.ng-invalid.ng-touched .p-multiselect-label {
+  border: 1px solid red;
 }

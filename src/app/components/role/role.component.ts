@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { Role } from '../models/role.model';
-import { RoleService } from '../service/role.service';
-import { ConfirmationService } from 'primeng/api';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {Role} from '../../models/role.model';
+import {RoleService} from '../../service/role.service';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
   selector: 'app-role',
@@ -15,13 +15,15 @@ export class RoleComponent implements OnInit {
   roleForm!: FormGroup;
   displayDialog: boolean = false;
   isNewRole: boolean = false;
-  role: Role = { name: ''};
+  role: Role = {name: ''};
+
   constructor(
     private roleService: RoleService,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadRoles();
@@ -49,7 +51,7 @@ export class RoleComponent implements OnInit {
 
   editRole(role: Role): void {
     this.isNewRole = false;
-    this.role = { ...role };
+    this.role = {...role};
     this.roleForm.patchValue(this.role);
     this.displayDialog = true;
   }
@@ -85,16 +87,20 @@ export class RoleComponent implements OnInit {
   deleteRole(roleId: number): void {
     this.confirmDelete().then((result) => {
       if (result) {
-        this.roleService.deleteRole(roleId).subscribe(
-          () => {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Role deleted successfully!' });
+        this.roleService.deleteRole(roleId).subscribe({
+          next: () => {
+            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Role deleted successfully!'});
             this.loadRoles();
           },
-          (error) => {
-            console.error('Error deleting role:', error);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete role.' });
+          error: (error: any) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete role.' + error.message,
+            });
           }
-        );
+        });
+
       }
     });
   }
@@ -115,7 +121,7 @@ export class RoleComponent implements OnInit {
 
   cancel() {
     this.displayDialog = false;
-    this.role = { name:'' };
+    this.role = {name: ''};
     this.roleForm.reset();
   }
 }

@@ -7,7 +7,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LoginComponent } from './login/login.component';
 import { UserComponent } from './components/user/user.component';
-import { RoleComponent } from './role/role.component';
+import { RoleComponent } from './components/role/role.component';
+import {BrandComponent} from "./components/brand/brand.component";
+import {ModelComponent} from "./components/model/model.component";
 
 const routes: Routes = [
   {
@@ -20,8 +22,10 @@ const routes: Routes = [
       { path: 'vehicles', component: VehicleComponent },
       { path: 'users', component: UserComponent },
       { path: 'roles', component: RoleComponent },
+      { path: 'brands', component: BrandComponent },
+      { path: 'models', component: ModelComponent },
       { path: 'leasing-contracts', component: LeasingContractComponent },
-      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: '/login', pathMatch: 'full' },
     ],
   },
 ];

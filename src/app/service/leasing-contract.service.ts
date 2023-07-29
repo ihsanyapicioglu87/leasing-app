@@ -5,6 +5,7 @@ import { LeasingContract } from '../models/leasing-contract.model';
 import { BASE_URL } from '../utils/utils';
 import { Vehicle } from '../models/vehicle.model';
 import { catchError } from 'rxjs/operators';
+import {Customer} from "../models/customer.model";
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class LeasingContractService {
   }
 
   updateLeasingContract(leasingContract: LeasingContract): Observable<LeasingContract> {
-    return this.http.put<LeasingContract>(`${this.apiUrl}/update/${leasingContract.id}`, leasingContract);
+    return this.http.put<LeasingContract>(`${this.apiUrl}/update`, leasingContract);
   }
 
   deleteLeasingContract(id: number): Observable<void> {

@@ -1,42 +1,79 @@
 <div class="container">
   <h1>User List</h1>
 
-    <p-table [value]="users" [paginator]="true" [rows]="10">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Username</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-user>
-        <tr>
-          <td>{{ user.username }}</td>
-          <td>
-            <button type="button" pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="editUser(user)"></button>
-            <button type="button" pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user)"></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <button type="button" pButton label="Add User" icon="pi pi-plus" class="p-button-rounded p-button-success" (click)="showDialogToAdd()"></button>
-  
-    <p-dialog header="{{ isNewUser ? 'Add User' : 'Edit User' }}" [(visible)]="displayDialog" [modal]="true">
-      <div class="user-dialog">
-        <div class="form-field">
-          <label for="username">Username:</label>
-          <input type="text" pInputText id="username" [(ngModel)]="user.username" />
+  <p-table [value]="users" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Username</th>
+        <th>Roles</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr class="p-datatable-rowfont-bold">
+        <td>{{ user.username }}</td>
+        <td>
+          <div>
+            <ng-container *ngIf="user.roles.length > 0; else noRoles">
+              {{ user.roles[0].name }}
+              <ng-container *ngFor="let role of user.roles.slice(1)">
+                , {{ role.name }}
+              </ng-container>
+            </ng-container>
+            <ng-template #noRoles>
+              No Roles
+            </ng-template>
+          </div>
+        </td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="showEditDialog(user)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <button pButton type="button" label="Add User" icon="pi pi-plus" (click)="showDialogToAdd()"
+          class="p-button-rounded p-button-success"></button>
+  <p-toast></p-toast>
+
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
+                   width="425" #confirmDialog>
+    <p-footer>
+      <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
+      <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
+    </p-footer>
+  </p-confirmDialog>
+
+  <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
+    <p-header>
+      {{ selectedUser && selectedUser.id ? 'Edit User' : 'Add User' }}
+    </p-header>
+
+    <form [formGroup]="userForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="username">Username</label>
+          <input id="username" type="text" pInputText formControlName="username" required>
         </div>
-        <div class="form-field">
-          <label for="password">Password:</label>
-          <input type="password" pPassword id="password" [(ngModel)]="user.password" />
+
+        <div class="p-field">
+          <label for="password">Password</label>
+          <input id="password" type="password" pInputText formControlName="password" required>
         </div>
-        <div class="form-field">
-          <label for="roles">Roles:</label>
-          <p-multiSelect [options]="roles" [(ngModel)]="selectedRoles" optionLabel="name"></p-multiSelect>
+
+        <div class="p-field">
+          <label for="roles">Roles</label>
+          <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name"></p-multiSelect>
         </div>
       </div>
-      <button type="button" pButton label="Save" (click)="saveUser()" class="save-button"></button>
-      <button type="button" pButton label="Cancel" (click)="cancel()" class="cancel-button"></button>
-    </p-dialog>
-  </div>
-  
+    </form>
+
+    <p-footer>
+      <div class="p-dialog-footer">
+        <button pButton type="submit" label="Save" (click)="saveUser()" class="p-button-primary"></button>
+        <button pButton type="button" label="Cancel" (click)="cancel()" class="p-button-secondary"></button>
+      </div>
+    </p-footer>
+  </p-dialog>
+</div>
