@@ -24,22 +24,25 @@ export class LoginComponent {
     });
   }
 
-  onLoginClick() {
+  async onLoginClick() {
     if (this.loginForm.invalid) {
-      if (this.loginForm.invalid) {
-        Utils.checkForUntouched(this.loginForm);
-        Utils.addInvalidFormMessage(this.messageService);
-        return;
-      }
+      Utils.checkForUntouched(this.loginForm);
+      Utils.addInvalidFormMessage(this.messageService);
       return;
     }
 
     const {username, password} = this.loginForm.value;
-    this.authService.login(username, password)
-    if (localStorage.getItem("loggedInUser")) {
-
-      console.log('Login successful!');
-      this.cdr.detectChanges();
+    try {
+      await this.authService.login(username, password);
+      if (this.authService.isLoggedIn()) {
+        // Logged in successfully, do whatever you need with loggedInUser
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser") || '{}');
+        console.log('Logged in successfully!', loggedInUser);
+        this.cdr.detectChanges();
+        console.log(Utils.getUser());
+      }
+    } catch (error) {
+      // Handle the error if needed
     }
   }
 }

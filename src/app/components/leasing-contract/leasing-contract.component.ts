@@ -11,6 +11,7 @@ import {Utils} from "../../utils/utils";
 import {of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {vehicleSelectionValidator} from "../../validators/vehicle-selection-validator";
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-leasing-contract',
@@ -41,6 +42,7 @@ export class LeasingContractComponent implements OnInit {
     private vehicleService: VehicleService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private currencyPipe: CurrencyPipe
 
   ) {
     this.leasingContractForm = this.formBuilder.group({
@@ -75,6 +77,8 @@ export class LeasingContractComponent implements OnInit {
               vehicleId: leasingContract.vehicleId,
               customerInfo: customer ? `${customer.firstName} ${customer.lastName}` : 'N/A',
               vehicleInfo: vehicle ? `${vehicle.brand.name} ${vehicle.model.name}` : 'N/A',
+              vin: vehicle ? `${vehicle.vin}` : 'N/A',
+              price: vehicle ? `${vehicle.price}` : 'N/A',
             };
 
             leasingContractData.push(leasingContractInfo);
@@ -94,7 +98,6 @@ export class LeasingContractComponent implements OnInit {
         })
     ).subscribe((customers) => {
       this.customers = [
-        { label: 'Select One', value: null },
         ...customers.map((customer) => ({
           label: customer.firstName + ' ' + customer.lastName,
           value: customer,
@@ -123,7 +126,6 @@ export class LeasingContractComponent implements OnInit {
       this.availableVehicles = availableVehicles;
 
       this.vehicles = [
-        { label: 'Select One', value: null },
         ...this.availableVehicles.map((vehicle) => ({
           label: vehicle.brand.name + ' ' + vehicle.model.name,
           value: vehicle,
@@ -187,6 +189,11 @@ export class LeasingContractComponent implements OnInit {
     this.displayDialog = true;
   }
 
+  formatCurrency(monthlyRate: number | null): string {
+    const formattedRate = this.currencyPipe.transform(monthlyRate, 'EUR', 'symbol', '1.2-2');
+    return formattedRate !== null ? formattedRate : '';
+  }
+
   saveLeasingContract(): void {
     if (this.leasingContractForm.invalid) {
       Utils.checkForUntouched(this.leasingContractForm);
@@ -197,7 +204,6 @@ export class LeasingContractComponent implements OnInit {
       });
       return;
     }
-
     this.selectedLeasingContract!.contractNo = this.leasingContractForm.value.contractNo;
     this.selectedLeasingContract!.monthlyRate = this.leasingContractForm.value.monthlyRate;
     this.selectedLeasingContract!.customerId = this.leasingContractForm.value.customer.value.id;
@@ -298,5 +304,4 @@ export class LeasingContractComponent implements OnInit {
   onEditDialogHide() {
     this.cancel();
   }
-
 }

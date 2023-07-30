@@ -22,4 +22,20 @@ p-table {
     margin-bottom: 10px;
 }
 
-  
+:host ::ng-deep .p-dialog .p-calendar {
+  width: 50% !important;
+  height: 50% !important;
+}
+
+/* Style the input field of the p-calendar */
+:host ::ng-deep .p-dialog .p-calendar .p-inputtext {
+  height: 50% !important;
+  padding: 0.5rem !important;
+}
+
+/* Custom style for the p-datepicker */
+:host ::ng-deep .p-datepicker {
+  z-index: 10000 !important;
+  position: static !important;
+}
+

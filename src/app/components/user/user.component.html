@@ -1,6 +1,4 @@
-<div class="container">
-  <h1>User List</h1>
-
+<p-panel header="User List">
   <p-table [value]="users" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
@@ -26,19 +24,20 @@
           </div>
         </td>
         <td>
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="showEditDialog(user)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteUser(user)"></button>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary"
+                  (click)="showEditDialog(user)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                  (click)="deleteUser(user)"></button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <button pButton type="button" label="Add User" icon="pi pi-plus" (click)="showDialogToAdd()"
+  <button pButton type="button" label="Add User" (click)="showDialogToAdd()"
           class="p-button-rounded p-button-success"></button>
   <p-toast></p-toast>
 
-  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
-                   width="425" #confirmDialog>
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false" #confirmDialog>
     <p-footer>
       <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
       <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
@@ -64,7 +63,7 @@
 
         <div class="p-field">
           <label for="roles">Roles</label>
-          <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name"></p-multiSelect>
+          <p-multiSelect id="roles" [options]="roles" formControlName="roles" optionLabel="name"></p-multiSelect>
         </div>
       </div>
     </form>
@@ -76,4 +75,4 @@
       </div>
     </p-footer>
   </p-dialog>
-</div>
+</p-panel>

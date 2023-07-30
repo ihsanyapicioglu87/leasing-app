@@ -80,6 +80,10 @@ export class VehicleComponent implements OnInit {
   }
 
 
+  fireOnChange() {
+
+  }
+
   onBrandSelectionChange(event: any): void {
     const selectedBrand: Brand = event.value;
     this.selectedBrandId = selectedBrand ? selectedBrand.id : undefined;
@@ -110,6 +114,7 @@ export class VehicleComponent implements OnInit {
   }
 
   showEditDialog(vehicle: Vehicle): void {
+    this.onBrandSelectionChange({ value: vehicle.brand });
     this.selectedVehicle = { ...vehicle };
     this.editMode = true;
     this.displayDialog = true;

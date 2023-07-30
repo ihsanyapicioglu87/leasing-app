@@ -12,3 +12,11 @@ input.ng-invalid.ng-touched {
 .p-multiselect.ng-invalid.ng-touched .p-multiselect-label {
   border: 1px solid red;
 }
+
+.p-button-rounded {
+  margin-right: 5px !important;
+}
+
+.p-button {
+  margin-top: 10px !important;
+}

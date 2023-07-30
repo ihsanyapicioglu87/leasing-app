@@ -1,0 +1,14 @@
+::ng-deep .p-toolbar {
+  border: none !important;
+}
+
+.p-menubar-end {
+  padding: 0.7em;
+  margin-bottom: 0.3em;
+}
+
+.username-label {
+  padding-top: 0.4em;
+  margin-right: 0.5em;
+  font-weight: bold;
+}

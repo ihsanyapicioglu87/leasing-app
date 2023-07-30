@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { LeasingContract } from '../models/leasing-contract.model';
-import { BASE_URL } from '../utils/utils';
-import { Vehicle } from '../models/vehicle.model';
-import { catchError } from 'rxjs/operators';
-import {Customer} from "../models/customer.model";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import {LeasingContract} from '../models/leasing-contract.model';
+import {BASE_URL} from '../utils/utils';
+import {Vehicle} from '../models/vehicle.model';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +29,7 @@ export class LeasingContractService {
   }
 
   updateLeasingContract(leasingContract: LeasingContract): Observable<LeasingContract> {
+    leasingContract.monthlyRate = parseFloat(leasingContract.monthlyRate.toString().replace(',', '.'));
     return this.http.put<LeasingContract>(`${this.apiUrl}/update`, leasingContract);
   }
 

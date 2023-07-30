@@ -1,6 +1,4 @@
-<div class="container">
-  <h1>Vehicle List</h1>
-
+<p-panel header="Vehicle List">
   <p-table [value]="vehicles" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
@@ -20,19 +18,20 @@
         <td>{{ vehicle.vin || '-' }}</td>
         <td>{{ vehicle.price }}</td>
         <td>
-          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary" (click)="showEditDialog(vehicle)"></button>
-          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteVehicle(vehicle)"></button>
+          <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary"
+                  (click)="showEditDialog(vehicle)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                  (click)="deleteVehicle(vehicle)"></button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <button pButton type="button" label="Add Vehicle" icon="pi pi-plus" (click)="showAddDialog()"
+  <button pButton type="button" label="Add Vehicle" (click)="showAddDialog()"
           class="p-button-rounded p-button-success"></button>
   <p-toast></p-toast>
 
-  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
-                   width="425" #confirmDialog>
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false" #confirmDialog>
     <p-footer>
       <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
       <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
@@ -49,12 +48,13 @@
         <div class="p-field">
           <label for="brand">Brand</label>
           <p-dropdown id="brand" [options]="brands" optionLabel="name" formControlName="brand"
-                      (onChange)="onBrandSelectionChange($event)" [style]="{ width: '100%' }"></p-dropdown>
+                      [placeholder]="'Select One'" (onChange)="onBrandSelectionChange($event)" [style]="{ width: '100%' }"></p-dropdown>
         </div>
 
         <div class="p-field">
           <label for="model">Model</label>
-          <p-dropdown id="model" [options]="modelsFilteredByBrand" optionLabel="name" formControlName="model" [style]="{ width: '100%' }"></p-dropdown>
+          <p-dropdown id="model" [options]="modelsFilteredByBrand" optionLabel="name" formControlName="model"
+                      [placeholder]="'Select One'" [style]="{ width: '100%' }"></p-dropdown>
         </div>
 
         <div class="p-field">
@@ -77,10 +77,10 @@
     <p-footer>
       <button *ngIf="selectedVehicle && selectedVehicle.id" type="button" pButton icon="pi pi-save"
               (click)="saveVehicle()" label="Save"></button>
-      <button *ngIf="!selectedVehicle || !selectedVehicle.id" type="button" pButton icon="pi pi-plus"
+      <button *ngIf="!selectedVehicle || !selectedVehicle.id" type="button" pButton
               (click)="saveVehicle()" label="Add"></button>
       <button type="button" pButton icon="pi pi-times" (click)="cancel()" label="Cancel" class="p-button-secondary">
       </button>
     </p-footer>
   </p-dialog>
-</div>
+</p-panel>

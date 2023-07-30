@@ -29,6 +29,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BrandComponent } from './components/brand/brand.component';
 import { ModelComponent } from './components/model/model.component';
 import {InputTextModule} from "primeng/inputtext";
+import {ToolbarModule} from "primeng/toolbar";
+import {CurrencyPipe} from "@angular/common";
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
   declarations: [
@@ -45,28 +48,30 @@ import {InputTextModule} from "primeng/inputtext";
     BrandComponent,
     ModelComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        TableModule,
-        TableModule,
-        ButtonModule,
-        DialogModule,
-        CalendarModule,
-        FormsModule,
-        DropdownModule,
-        ConfirmDialogModule,
-        HttpClientModule,
-        NoopAnimationsModule,
-        ToastModule,
-        ReactiveFormsModule,
-        MenubarModule,
-        MultiSelectModule,
-        AutoCompleteModule,
-        InputTextModule
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    TableModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    CalendarModule,
+    FormsModule,
+    DropdownModule,
+    ConfirmDialogModule,
+    HttpClientModule,
+    NoopAnimationsModule,
+    ToastModule,
+    ReactiveFormsModule,
+    MenubarModule,
+    MultiSelectModule,
+    AutoCompleteModule,
+    InputTextModule,
+    ToolbarModule,
+    PanelModule
 
-    ],
-  providers: [MessageService, ConfirmationService],
+  ],
+  providers: [MessageService, ConfirmationService, CurrencyPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
