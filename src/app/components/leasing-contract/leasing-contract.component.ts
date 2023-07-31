@@ -189,8 +189,8 @@ export class LeasingContractComponent implements OnInit {
     this.displayDialog = true;
   }
 
-  formatCurrency(monthlyRate: number | null): string {
-    const formattedRate = this.currencyPipe.transform(monthlyRate, 'EUR', 'symbol', '1.2-2');
+  formatCurrency(currency: number | undefined): string {
+    const formattedRate = this.currencyPipe.transform(currency, 'EUR', 'symbol', '1.2-2');
     return formattedRate !== null ? formattedRate : '';
   }
 

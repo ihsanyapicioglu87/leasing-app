@@ -7,6 +7,7 @@ import {VehicleService} from '../../service/vehicle.service';
 import {BrandService} from '../../service/brand.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Utils} from '../../utils/utils';
+import {CurrencyPipe} from "@angular/common";
 
 @Component({
   selector: 'app-vehicle',
@@ -30,7 +31,8 @@ export class VehicleComponent implements OnInit {
     private vehicleService: VehicleService,
     private brandService: BrandService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private currencyPipe: CurrencyPipe
   ) {}
 
   ngOnInit(): void {
@@ -199,6 +201,11 @@ export class VehicleComponent implements OnInit {
         });
       },
     });
+  }
+
+  formatCurrency(monthlyRate: number | null): string {
+    const formattedRate = this.currencyPipe.transform(monthlyRate, 'EUR', 'symbol', '1.2-2');
+    return formattedRate !== null ? formattedRate : '';
   }
 
   cancel(): void {

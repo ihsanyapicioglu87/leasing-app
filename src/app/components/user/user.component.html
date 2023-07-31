@@ -44,7 +44,7 @@
     </p-footer>
   </p-confirmDialog>
 
-  <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
+  <p-dialog [(visible)]="displayDialog" class="userAddDialog" [modal]="true"  [style]="{ width: '50%', height: '70%' }">
     <p-header>
       {{ selectedUser && selectedUser.id ? 'Edit User' : 'Add User' }}
     </p-header>

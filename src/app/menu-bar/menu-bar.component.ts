@@ -62,7 +62,7 @@ export class MenuBarComponent implements OnInit {
       },
       {
         label: 'Roles',
-        icon: 'pi pi-user',
+        icon: 'pi pi-share-alt',
         routerLink: '/roles',
         visible: Utils.hasRole(UserRole.ROLE_ADMIN),
       },

@@ -30,7 +30,8 @@
       </tr>
     </ng-template>
   </p-table>
-  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false" #confirmDialog>
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" [baseZIndex]="10000" [closable]="false"
+                   #confirmDialog>
     <p-footer>
       <button pButton type="button" label="No" (click)="confirmDialog.reject()" class="p-button-danger"></button>
       <button pButton type="button" label="Yes" (click)="confirmDialog.accept()"></button>
@@ -44,23 +45,25 @@
             [resizable]="true" (onHide)="onEditDialogHide()">
     <ng-container *ngIf="selectedLeasingContract">
       <form [formGroup]="leasingContractForm">
-        <div class="form-field">
-          <label for="contractNo">Contract No</label>
-          <input id="contractNo" type="text" pInputText formControlName="contractNo" required/>
-        </div>
-        <div class="form-field">
-          <label for="monthlyRate">Monthly Rate</label>
-          <input id="monthlyRate" type="text" pInputText formControlName="monthlyRate" required/>
-        </div>
-        <div class="form-field">
-          <label for="customer">Customer</label>
-          <p-dropdown id="customer" [options]="customers" optionLabel="label" formControlName="customer"
-                      [placeholder]="'Select One'" [style]="{ 'width': '100%' }"></p-dropdown>
-        </div>
-        <div class="form-field">
-          <label for="vehicle">Vehicle</label>
-          <p-dropdown id="vehicle" [options]="vehicles" optionLabel="label" formControlName="vehicle"
-                      [placeholder]="'Select One'" [style]="{ 'width': '100%' }"></p-dropdown>
+        <div class="p-fluid">
+          <div class="p-field">
+            <label for="contractNo">Contract No</label>
+            <input id="contractNo" type="text" pInputText formControlName="contractNo" required/>
+          </div>
+          <div class="p-field">
+            <label for="monthlyRate">Monthly Rate</label>
+            <input id="monthlyRate" type="text" pInputText formControlName="monthlyRate" required/>
+          </div>
+          <div class="p-field">
+            <label for="customer">Customer</label>
+            <p-dropdown id="customer" [options]="customers" optionLabel="label" formControlName="customer"
+                        [placeholder]="'Select One'" [style]="{ 'width': '100%' }"></p-dropdown>
+          </div>
+          <div class="p-field">
+            <label for="vehicle">Vehicle</label>
+            <p-dropdown id="vehicle" [options]="vehicles" optionLabel="label" formControlName="vehicle"
+                        [placeholder]="'Select One'" [style]="{ 'width': '100%' }"></p-dropdown>
+          </div>
         </div>
       </form>
     </ng-container>
@@ -74,10 +77,11 @@
   <p-dialog header="Leasing Contract Details" [(visible)]="displayDetailsDialog" styleClass="dialog-contract-details">
     <ng-container *ngIf="selectedLeasingContract">
       <p>Contract Number: {{ selectedLeasingContract.contractNo }}</p>
-      <p>Monthly Rate: {{ selectedLeasingContract.monthlyRate }}</p>
+      <p>Monthly Rate: {{ formatCurrency(selectedLeasingContract.monthlyRate) }}</p>
       <p>Customer Name: {{ selectedCustomer?.firstName }} {{ selectedCustomer?.lastName }}</p>
       <p>Vehicle Brand: {{ selectedVehicle?.brand?.name }}</p>
       <p>Vehicle Model: {{ selectedVehicle?.model?.name }}</p>
+      <p>Vehicle Price: {{ formatCurrency(selectedVehicle?.price) }}</p>
     </ng-container>
     <button pButton type="button" (click)="hideDetailsDialog()" label="Close"></button>
   </p-dialog>

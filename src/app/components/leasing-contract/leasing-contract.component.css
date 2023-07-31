@@ -18,10 +18,6 @@ p-table {
     margin-bottom: 20px;
 }
 
-.form-field {
-    margin-bottom: 10px;
-}
-
 .p-dialog-content {
     display: grid;
     grid-template-columns: 1fr;

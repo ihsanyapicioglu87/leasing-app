@@ -18,10 +18,6 @@ p-table {
     margin-bottom: 20px;
 }
 
-.form-field {
-    margin-bottom: 10px;
-}
-
 :host ::ng-deep .p-dialog .p-calendar {
   width: 50% !important;
   height: 50% !important;

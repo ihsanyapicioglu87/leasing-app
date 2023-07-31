@@ -16,7 +16,7 @@
         <td>{{ vehicle.model.name }}</td>
         <td>{{ vehicle.modelYear }}</td>
         <td>{{ vehicle.vin || '-' }}</td>
-        <td>{{ vehicle.price }}</td>
+        <td>{{ formatCurrency(vehicle.price) }}</td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-primary"
                   (click)="showEditDialog(vehicle)"></button>
