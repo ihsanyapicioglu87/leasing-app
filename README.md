@@ -1,27 +1,41 @@
-# LeasingApp
+# Allane Leasing Application - Frontend (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.5.
+This is the README file for the Allane SE Leasing Application frontend built with Angular. The frontend application complements the backend Spring Boot project and provides the user interface for managing leasing contracts, customers, vehicles, and other functionalities. The Angular project is named "leasing-app."
 
-## Development server
+## Preconditions
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Before running the frontend application, please ensure the following prerequisites are met:
 
-## Code scaffolding
+1. Node.js and npm are installed on your system.
+2. Angular CLI is installed on your system.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## How to Start the Frontend Application
 
-## Build
+Follow the steps below to set up and run the Allane SE Leasing Application frontend:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. **Clone the Git repository:**
+   ```bash
+   git clone https://github.com/ihsanyapicioglu87/leasing-app.git
+   cd leasing-app
+2. **Install dependencies:**
+   npm install
+3. **Start the Application**
+   ng serve
 
-## Running unit tests
+4.The application will be accessible at: **http://localhost:4200**
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Application Structure
 
-## Running end-to-end tests
+The Angular frontend follows a modular structure, with separate modules for different parts of the application. The main modules include:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Customers:** Manage customer information and leasing contracts associated with each customer.
+- **Vehicles:** Manage vehicle information, brands, and models.
+- **Leasing Contracts:** Create and manage leasing contracts, including contract details, monthly rates, and associated vehicles and customers.
+- **Users and Roles:** Provide login and logout mechanism and manage user roles and permissions.
 
-## Further help
+## Chosen Solution
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Angular was chosen as the frontend framework for the Allane SE Leasing Application due to its flexibility, scalability, and rich ecosystem of libraries and tools. It allows us to build a responsive and user-friendly user interface, making it an ideal choice for enterprise-grade applications.
+
+The frontend is designed to communicate with the backend Spring Boot application through REST APIs, ensuring a seamless integration between the frontend and backend components.
+
